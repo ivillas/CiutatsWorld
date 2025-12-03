@@ -66,17 +66,9 @@ public class Aplicacio {
 		itemLlistar = new JMenuItem("Llistes Ciutats");
 		itemLlistar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<String> ciutats = new ArrayList<>();
-				try {
-					ciutats = CiutatDAO.llistarCiutats();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				for(String ciutat : ciutats) {
-					System.out.println(ciutat);
-				}
+                VistaLlista vistaLlista = new VistaLlista();
+                vistaLlista.mostrar();
+                
 								
 				
 			}

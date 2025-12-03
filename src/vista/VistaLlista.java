@@ -1,56 +1,72 @@
 package vista;
 
-import java.awt.EventQueue;
-
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.BorderLayout;
-import javax.swing.JTextPane;
+
+import controlador.CiutatDAO;
 
 public class VistaLlista {
 
-	private JFrame frame;
+    private JFrame frame;
+    private JTable table; 
+    private DefaultTableModel tableModel; 
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaLlista window = new VistaLlista();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Constructor.
+     */
+    public VistaLlista() {
+        initialize();
+        mostrarCiutats(); // Metode per mostrar les ciutats
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public VistaLlista() {
-		initialize();
-	}
+    /**
+     * Inicializa el contingut.
+     */
+    private void initialize() {
+        frame = new JFrame("Llistat de Ciutats");
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.getContentPane().setLayout(new BorderLayout());
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setAutoRequestFocus(false);
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(90, 30, 59, 25);
-		lblNewLabel.setEnabled(false);
-		frame.getContentPane().add(lblNewLabel);
-		
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(177, 30, 145, 25);
-		frame.getContentPane().add(textPane);
-	}
+        JLabel lblNewLabel = new JLabel("Ciutats:");
+        frame.getContentPane().add(lblNewLabel, BorderLayout.NORTH);
+
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Llista de Ciutats"); 
+
+        table = new JTable(tableModel); 
+        JScrollPane scrollPane = new JScrollPane(table); 
+        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Metode per a mostrar les ciutats.
+     */
+    private void mostrarCiutats() {
+        try {
+            List<String> ciutats = CiutatDAO.llistarCiutats();
+            for (String ciutat : ciutats) {
+                tableModel.addRow(new Object[]{ciutat}); // Añadimos cada ciudad como una fila en la tabla
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Error al cargar las ciudades.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Mostre la finestra.
+     */
+    public void mostrar() {
+        frame.setVisible(true);
+    }
 }
