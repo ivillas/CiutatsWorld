@@ -22,7 +22,7 @@ public class Aplicacio {
 
 	private JFrame frame;
 	private JMenu menuMenu, menuAjuda;
-	private JMenuItem itemLlistar, itemAddCiutat, itemEditCiutat, itemSortir;
+	private JMenuItem itemLlistar,itemLlistarNom, itemAddCiutat, itemEditCiutat, itemSortir;
 	private JMenuItem itemAjuda, itemInfo;
 	
 
@@ -67,9 +67,7 @@ public class Aplicacio {
 		itemLlistar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
                 VistaLlista vistaLlista = new VistaLlista();
-                vistaLlista.mostrar();
-                
-								
+                vistaLlista.mostrar();							
 				
 			}
 		});
@@ -77,6 +75,19 @@ public class Aplicacio {
 		itemLlistar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,ActionEvent.ALT_MASK));
 		itemLlistar.setActionCommand("llistar");
 
+		
+		itemLlistarNom = new JMenuItem("Buscar Ciutats");
+		itemLlistarNom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VistaBuscarCiutat vistabuscarciutat = new VistaBuscarCiutat();
+				vistabuscarciutat.mostrar();							
+				
+			}
+		});
+		itemLlistarNom.setMnemonic(KeyEvent.VK_N);
+		itemLlistarNom.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.ALT_MASK));
+		itemLlistarNom.setActionCommand("buscar");
+		
 		
 		itemAddCiutat = new JMenuItem("Afegir Ciutat");
 		itemAddCiutat.setMnemonic(KeyEvent.VK_A);
@@ -98,6 +109,7 @@ public class Aplicacio {
 		
 		
 		menuMenu.add(itemLlistar);
+		menuMenu.add(itemLlistarNom);
 		menuMenu.add(itemAddCiutat);
 		menuMenu.add(itemEditCiutat);
 		menuMenu.add(itemSortir);
