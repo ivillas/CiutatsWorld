@@ -60,7 +60,7 @@ public class CiutatDAO {
 	public static List<String> llistarPerNom (String cadena) throws SQLException{
 	    Connection con = Configuracio.getConnection();
 	    cadena = "'%" + cadena + "%'";
-	    String sql = "SELECT name FROM city WHERE name LIKE cadena";
+	    String sql = "SELECT name FROM city WHERE name LIKE" + cadena;
 	    List<String> ciutats = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);

@@ -23,6 +23,7 @@ public class VistaBuscarCiutat {
     private JTable tablaCiutats; 
     private DefaultTableModel tableModel; 
     private JTextField txfCiutat;
+    private JButton btnTornarbtnNewButton;
 
     /**
      * Constructor.
@@ -39,28 +40,28 @@ public class VistaBuscarCiutat {
     
     private void initialize() {
         frame = new JFrame("Llistat de Ciutats");
-        frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(900, 400, 500, 500);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Escriu per buscar la ciutat:");
-        lblNewLabel.setBounds(0, 11, 154, 14);
+        lblNewLabel.setBounds(10, 11, 163, 14);
         frame.getContentPane().add(lblNewLabel);
 
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("Llista de Ciutats"); 
+        tableModel.addColumn("Ciutats trobades"); 
 
         tablaCiutats = new JTable(tableModel); 
         JScrollPane scrollPane = new JScrollPane(tablaCiutats); 
-        scrollPane.setBounds(0, 28, 424, 222);
+        scrollPane.setBounds(10, 48, 464, 368);
         frame.getContentPane().add(scrollPane);
         
         txfCiutat = new JTextField();
-        txfCiutat.setBounds(148, 8, 86, 20);
+        txfCiutat.setBounds(173, 8, 86, 20);
         frame.getContentPane().add(txfCiutat);
         txfCiutat.setColumns(10);
         
-        JButton btnBuscar = new JButton("New button");
+        JButton btnBuscar = new JButton("Buscar");
         btnBuscar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
@@ -70,6 +71,16 @@ public class VistaBuscarCiutat {
         });
         btnBuscar.setBounds(280, 7, 89, 23);
         frame.getContentPane().add(btnBuscar);
+        
+        btnTornarbtnNewButton = new JButton("Tornar");
+        btnTornarbtnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		new Aplicacio().mostrar();
+        		frame.dispose();
+        	}
+        });
+        btnTornarbtnNewButton.setBounds(195, 427, 89, 23);
+        frame.getContentPane().add(btnTornarbtnNewButton);
     }
 
     /**
@@ -77,10 +88,11 @@ public class VistaBuscarCiutat {
      */
     
     private void mostrarCiutats(String cadena) {
+    	 tableModel.setRowCount(0);
         try {
             List<String> ciutats = CiutatDAO.llistarPerNom(cadena);
             for (String ciutat : ciutats) {
-                tableModel.addRow(new Object[]{ciutat}); // Añadimos cada ciudad como una fila en la tabla
+                tableModel.addRow(new Object[]{ciutat}); 
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -15,6 +15,7 @@ import controlador.CiutatDAO;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class VistaLlista {
 
@@ -37,12 +38,13 @@ public class VistaLlista {
     
     private void initialize() {
         frame = new JFrame("Llistat de Ciutats");
-        frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(900, 400, 500, 500);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
         JLabel lblCiutats = new JLabel("Ciutats:");
-        lblCiutats.setBounds(0, 0, 452, 14);
+        lblCiutats.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblCiutats.setBounds(199, 21, 67, 14);
         frame.getContentPane().add(lblCiutats);
 
         tableModel = new DefaultTableModel();
@@ -50,7 +52,7 @@ public class VistaLlista {
 
         tablaCiutats = new JTable(tableModel); 
         JScrollPane scrollPane = new JScrollPane(tablaCiutats); 
-        scrollPane.setBounds(0, 14, 434, 225);
+        scrollPane.setBounds(10, 46, 464, 370);
         frame.getContentPane().add(scrollPane);
         
         JButton btntornar = new JButton("Tornar");
@@ -60,7 +62,7 @@ public class VistaLlista {
         		frame.dispose();
         	}
         });
-        btntornar.setBounds(171, 238, 89, 23);
+        btntornar.setBounds(199, 427, 89, 23);
         frame.getContentPane().add(btntornar);
     }
 

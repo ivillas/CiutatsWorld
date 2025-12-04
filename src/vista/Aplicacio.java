@@ -1,21 +1,18 @@
 package vista;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.MenuBar;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-
-import controlador.CiutatDAO;
-
 import java.awt.event.ActionListener;
 
 public class Aplicacio {
@@ -24,7 +21,7 @@ public class Aplicacio {
 	private JMenu menuMenu, menuAjuda;
 	private JMenuItem itemLlistar,itemLlistarNom, itemAddCiutat, itemEditCiutat, itemSortir;
 	private JMenuItem itemAjuda, itemInfo;
-	
+	private String rutaImatge = "/imatges/world.jpg";
 
 	/**
 	 * Launch the application.
@@ -51,18 +48,39 @@ public class Aplicacio {
 
 	/**
 	 * Initialize the contents of the frame.
-	 */
-	
+	 */	
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(900, 400, 500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+	
+        // Panel personalitzar per la imatge de fons
+        JPanel panel = new JPanel() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource(rutaImatge));
+                
+                if (img != null) {
+                    // Redimensionar la imagen al tamaño del panel
+                    int panelWidth = getWidth();
+                    int panelHeight = getHeight();
+                    g.drawImage(img, 0, 0, panelWidth, panelHeight, this);
+                } else {
+                    System.out.println("No se pudo cargar la imagen: " + rutaImatge);
+                }
+            }
+        };
+        
+        // establim i agregem el panel
+        panel.setLayout(new BorderLayout());
+        frame.setContentPane(panel);
 		JMenuBar menubar = new JMenuBar();
-		
-		menuMenu = new JMenu("Menu");
-		
+		menuMenu = new JMenu("Menu");		
 		itemLlistar = new JMenuItem("Llistes Ciutats");
 		itemLlistar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -135,7 +153,6 @@ public class Aplicacio {
 		frame.setJMenuBar(menubar);
 		
 	}
-
 
     /**
      * Mostre la finestra.
