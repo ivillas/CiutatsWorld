@@ -1,30 +1,27 @@
 package vista;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.MenuBar;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-
-import controlador.CiutatDAO;
-
 import java.awt.event.ActionListener;
 
 public class Aplicacio {
 
 	private JFrame frame;
 	private JMenu menuMenu, menuAjuda;
-	private JMenuItem itemLlistar, itemAddCiutat, itemEditCiutat, itemSortir;
+	private JMenuItem itemLlistar,itemLlistarNom, itemAddCiutat, itemEditCiutat, itemSortir;
 	private JMenuItem itemAjuda, itemInfo;
-	
+	private String rutaImatge = "/imatges/world.jpg";
 
 	/**
 	 * Launch the application.
@@ -51,32 +48,62 @@ public class Aplicacio {
 
 	/**
 	 * Initialize the contents of the frame.
-	 */
-	
+	 */	
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(900, 400, 500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+	
+        // Panel personalitzar per la imatge de fons
+        JPanel panel = new JPanel() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource(rutaImatge));
+                
+                if (img != null) {
+                    // Redimensionar la imagen al tamaño del panel
+                    int panelWidth = getWidth();
+                    int panelHeight = getHeight();
+                    g.drawImage(img, 0, 0, panelWidth, panelHeight, this);
+                } else {
+                    System.out.println("No se pudo cargar la imagen: " + rutaImatge);
+                }
+            }
+        };
+        
+        // establim i agregem el panel
+        panel.setLayout(new BorderLayout());
+        frame.setContentPane(panel);
 		JMenuBar menubar = new JMenuBar();
-		
-		menuMenu = new JMenu("Menu");
-		
+		menuMenu = new JMenu("Menu");		
 		itemLlistar = new JMenuItem("Llistes Ciutats");
 		itemLlistar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-                VistaLlista vistaLlista = new VistaLlista();
-                vistaLlista.mostrar();
-                
-								
-				
+                new VistaLlista().mostrar();							
+				frame.dispose();
 			}
 		});
 		itemLlistar.setMnemonic(KeyEvent.VK_L);
 		itemLlistar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,ActionEvent.ALT_MASK));
 		itemLlistar.setActionCommand("llistar");
 
+		
+		itemLlistarNom = new JMenuItem("Buscar Ciutats");
+		itemLlistarNom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaBuscarCiutat().mostrar();							
+				frame.dispose();
+			}
+		});
+		itemLlistarNom.setMnemonic(KeyEvent.VK_N);
+		itemLlistarNom.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.ALT_MASK));
+		itemLlistarNom.setActionCommand("buscar");
+		
 		
 		itemAddCiutat = new JMenuItem("Afegir Ciutat");
 		itemAddCiutat.setMnemonic(KeyEvent.VK_A);
@@ -98,6 +125,7 @@ public class Aplicacio {
 		
 		
 		menuMenu.add(itemLlistar);
+		menuMenu.add(itemLlistarNom);
 		menuMenu.add(itemAddCiutat);
 		menuMenu.add(itemEditCiutat);
 		menuMenu.add(itemSortir);
@@ -126,4 +154,11 @@ public class Aplicacio {
 		
 	}
 
+    /**
+     * Mostre la finestra.
+     */
+    public void mostrar() {
+        frame.setVisible(true);
+    }
+	
 }
