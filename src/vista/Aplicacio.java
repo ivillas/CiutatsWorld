@@ -66,9 +66,8 @@ public class Aplicacio {
 		itemLlistar = new JMenuItem("Llistes Ciutats");
 		itemLlistar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-                VistaLlista vistaLlista = new VistaLlista();
-                vistaLlista.mostrar();							
-				
+                new VistaLlista().mostrar();							
+				frame.dispose();
 			}
 		});
 		itemLlistar.setMnemonic(KeyEvent.VK_L);
@@ -79,9 +78,8 @@ public class Aplicacio {
 		itemLlistarNom = new JMenuItem("Buscar Ciutats");
 		itemLlistarNom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VistaBuscarCiutat vistabuscarciutat = new VistaBuscarCiutat();
-				vistabuscarciutat.mostrar();							
-				
+				new VistaBuscarCiutat().mostrar();							
+				frame.dispose();
 			}
 		});
 		itemLlistarNom.setMnemonic(KeyEvent.VK_N);
@@ -138,4 +136,12 @@ public class Aplicacio {
 		
 	}
 
+
+    /**
+     * Mostre la finestra.
+     */
+    public void mostrar() {
+        frame.setVisible(true);
+    }
+	
 }

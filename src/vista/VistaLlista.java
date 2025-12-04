@@ -12,6 +12,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 
 import controlador.CiutatDAO;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VistaLlista {
 
@@ -36,17 +39,29 @@ public class VistaLlista {
         frame = new JFrame("Llistat de Ciutats");
         frame.setBounds(100, 100, 450, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
 
         JLabel lblCiutats = new JLabel("Ciutats:");
-        frame.getContentPane().add(lblCiutats, BorderLayout.NORTH);
+        lblCiutats.setBounds(0, 0, 452, 14);
+        frame.getContentPane().add(lblCiutats);
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Llista de Ciutats"); 
 
         tablaCiutats = new JTable(tableModel); 
         JScrollPane scrollPane = new JScrollPane(tablaCiutats); 
-        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setBounds(0, 14, 434, 225);
+        frame.getContentPane().add(scrollPane);
+        
+        JButton btntornar = new JButton("Tornar");
+        btntornar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		new Aplicacio().mostrar();
+        		frame.dispose();
+        	}
+        });
+        btntornar.setBounds(171, 238, 89, 23);
+        frame.getContentPane().add(btntornar);
     }
 
     /**
