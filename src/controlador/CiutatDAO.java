@@ -110,7 +110,7 @@ public class CiutatDAO {
 	
 	public static List<String> llistaPaisos() throws SQLException {
 	    Connection con = Configuracio.getConnection();
-	    String sql = "SELECT name FROM city";
+	    String sql = "SELECT Name AS country_name, Code AS country_code FROM country";
 	    List<String> paisos = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);
@@ -134,7 +134,7 @@ public class CiutatDAO {
 	public static List<String> llistaDistrictes (String code) throws SQLException{
 	    Connection con = Configuracio.getConnection();
 	    code = "'%" + code + "%'";
-	    String sql = "SELECT name FROM city WHERE name LIKE" + code;
+	    String sql = "SELECT District FROM city WHERE CountryCode = \'CODIGO_DEL_PAIS\'";
 	    List<String> districtes = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);
