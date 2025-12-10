@@ -5,8 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -14,6 +16,8 @@ import controlador.CiutatDAO;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VistaAddCiutat {
 
@@ -21,7 +25,8 @@ public class VistaAddCiutat {
 	private JTextField txtId;
 	private JTextField txtNom;
 	private JTextField txtPoblacio;
-
+	private String code;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -102,15 +107,67 @@ public class VistaAddCiutat {
 		txtPoblacio.setBounds(204, 260, 119, 20);
 		frame.getContentPane().add(txtPoblacio);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(204, 180, 119, 22);
-		frame.getContentPane().add(comboBox);
+		JComboBox<String> cmbPaisos = new JComboBox<>();
+		cmbPaisos.setBounds(204, 180, 119, 22);
+		frame.getContentPane().add(cmbPaisos);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(204, 220, 119, 22);
-		frame.getContentPane().add(comboBox_1);
+		List<String> paisos = null;
+		try {
+			paisos = CiutatDAO.llistaPaisos();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(String pais : paisos) {
+			cmbPaisos.addItem(pais);
+		}
+		
+		try {
+		 code = CiutatDAO.codiPais(cmbPaisos.getSelectedItem().toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		JComboBox cmbDistricte = new JComboBox();
+		cmbDistricte.setBounds(204, 220, 119, 22);
+		frame.getContentPane().add(cmbDistricte);
+	
+		
+        cmbPaisos.addActionListener(e -> {
+            cmbDistricte.removeAllItems(); // Netejar els districtes abans de carregar
+
+            try {
+            	code = CiutatDAO.codiPais(cmbPaisos.getSelectedItem().toString());
+            	System.out.println(code);
+            	
+                List<String> districtes = CiutatDAO.llistaDistrictes(code); 
+                System.out.println(districtes);
+                for (String districte : districtes) {
+                    System.out.println(districte); 
+                } 
+                
+                for (String districte : districtes) {
+                    cmbDistricte.addItem(districte); 
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Mostrar error si hi ha una excepció
+            }
+        });
+		
 		
 		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long poblacio = Long.parseLong(txtPoblacio.getText());
+			if(poblacio < 10000 || poblacio > 5000000000L) {
+				System.out.println("La poblacio ha de ser numeric i ha d'estar entre 10.000 i 5.000.000.000 habitans");
+			}
+			}
+			
+		});
 		btnGuardar.setBounds(107, 411, 89, 23);
 		frame.getContentPane().add(btnGuardar);
 		

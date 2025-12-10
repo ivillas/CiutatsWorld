@@ -110,14 +110,14 @@ public class CiutatDAO {
 	
 	public static List<String> llistaPaisos() throws SQLException {
 	    Connection con = Configuracio.getConnection();
-	    String sql = "SELECT Name AS country_name, Code AS country_code FROM country";
+	    String sql = "SELECT Name  FROM country";
 	    List<String> paisos = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);
 	         ResultSet resultSet = statement.executeQuery()) {
 
 	        while (resultSet.next()) {
-	            paisos.add(resultSet.getString("name"));
+	            paisos.add(resultSet.getString("Name"));
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); 
@@ -133,15 +133,16 @@ public class CiutatDAO {
 	
 	public static List<String> llistaDistrictes (String code) throws SQLException{
 	    Connection con = Configuracio.getConnection();
-	    code = "'%" + code + "%'";
-	    String sql = "SELECT District FROM city WHERE CountryCode = \'CODIGO_DEL_PAIS\'";
+	    code = "'" + code + "'";
+	    String sql = "SELECT District FROM city WHERE CountryCode = " + code;
+	    
 	    List<String> districtes = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);
 	         ResultSet resultSet = statement.executeQuery()) {
 
 	        while (resultSet.next()) {
-	            districtes.add(resultSet.getString("name"));
+	            districtes.add(resultSet.getString("District"));
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); 
@@ -155,6 +156,28 @@ public class CiutatDAO {
 	}
 	
 	
+	public static String codiPais (String pais) throws SQLException{
+		String code = "'%" + pais + "%'";
+	    Connection con = Configuracio.getConnection();
+		
+	    String sql = "SELECT code FROM country WHERE NAME like " + code;
+	    try (PreparedStatement statement = con.prepareStatement(sql);
+		         ResultSet resultSet = statement.executeQuery()) {
+
+		        while (resultSet.next()) {
+		           code = resultSet.getString("code");
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace(); 
+		    } finally {
+		        if (con != null) {
+		            con.close(); 
+		        }
+		    }
+
+	    return code;
 	
 	
+	
+	}
 }
