@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
+
+import javax.swing.JOptionPane;
 
 import model.Ciutat;
 
@@ -177,7 +181,40 @@ public class CiutatDAO {
 
 	    return code;
 	
-	
-	
 	}
+	
+	public static boolean existeixCiutat (String nom, String code) throws SQLException{
+		Connection con = Configuracio.getConnection();
+		code = "'" + code + "'";
+		nom = "'" + nom + "'";
+		int resultat = 0;
+		String sql = "SELECT COUNT(*) FROM city WHERE name = " + nom + " AND CountryCode = " + code;
+		 try (PreparedStatement statement = con.prepareStatement(sql);
+		ResultSet resulset = statement.executeQuery()) {
+			 if (resulset.next()) {
+			 resultat = resulset.getInt("COUNT(*)");
+			 }
+		}
+		
+		 return (resultat >0);
+		}
+		
+	public static void addCiutat(String nom, String code, String district, long population) throws SQLException{
+		int populationInt = (int) population;
+	    if (population < Integer.MIN_VALUE || population > Integer.MAX_VALUE) {
+	        throw new IllegalArgumentException("La población exedeis el rang d'un enter.");
+	    }
+		 Connection con = Configuracio.getConnection();
+		    String sql = "INSERT INTO city (name, CountryCode, District, Population) VALUES (?, ?, ?, ?)";
+
+		    try (PreparedStatement statement = con.prepareStatement(sql)) {
+		        statement.setString(1, nom);
+		        statement.setString(2, code);
+		        statement.setString(3, district);
+		        statement.setInt(4, populationInt);
+		        statement.executeUpdate(); 
+		        JOptionPane.showMessageDialog(null, "Ciutat afegida correctament");
+		    }
+	}
+	
 }

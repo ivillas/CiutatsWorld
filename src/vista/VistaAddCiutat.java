@@ -4,9 +4,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -141,14 +144,8 @@ public class VistaAddCiutat {
 
             try {
             	code = CiutatDAO.codiPais(cmbPaisos.getSelectedItem().toString());
-            	System.out.println(code);
-            	
+            	            	
                 List<String> districtes = CiutatDAO.llistaDistrictes(code); 
-                System.out.println(districtes);
-                for (String districte : districtes) {
-                    System.out.println(districte); 
-                } 
-                
                 for (String districte : districtes) {
                     cmbDistricte.addItem(districte); 
                 }
@@ -161,18 +158,74 @@ public class VistaAddCiutat {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String ciutat = txtNom.getText();
+				try {
+					if(CiutatDAO.existeixCiutat(ciutat, code)) {
+						JOptionPane.showMessageDialog(frame,"La ciutat ja existeix en aquest pais");
+						txtNom.requestFocus();
+						txtNom.selectAll();
+					}
+				} catch (HeadlessException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				String contingut = txtPoblacio.getText();
+				if(!isNumeric(contingut)) {
+					 JOptionPane.showMessageDialog(frame,"La població nomes pot contindre un nombre enter positiu");
+					 txtPoblacio.requestFocus();
+					 txtPoblacio.selectAll();
+				}
 				long poblacio = Long.parseLong(txtPoblacio.getText());
 			if(poblacio < 10000 || poblacio > 5000000000L) {
-				System.out.println("La poblacio ha de ser numeric i ha d'estar entre 10.000 i 5.000.000.000 habitans");
+				 JOptionPane.showMessageDialog(frame,"La poblacio ha de ser numeric i ha d'estar entre 10.000 i 5.000.000.000 habitans");
+				 txtPoblacio.requestFocus();
+				 txtPoblacio.selectAll();
 			}
+			
+			String district = cmbDistricte.getSelectedItem().toString();
+				
+			try {
+				if(!CiutatDAO.existeixCiutat(ciutat, code)) {
+				CiutatDAO.addCiutat(ciutat, code,district , poblacio);
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+    		new Aplicacio().mostrar();
+    		frame.dispose();
+			
+			}
+			
+			
+
+			private static boolean isNumeric(String str) {
+			    return str.matches("\\d+"); 
+			}
+			
+	
 			
 		});
 		btnGuardar.setBounds(107, 411, 89, 23);
 		frame.getContentPane().add(btnGuardar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+        		new Aplicacio().mostrar();
+        		frame.dispose();
+			}
+		});
 		btnCancelar.setBounds(280, 411, 89, 23);
 		frame.getContentPane().add(btnCancelar);
 	}
+	
+    /**
+     * Mostre la finestra.
+     */
+    public void mostrar() {
+        frame.setVisible(true);
+    }
 }

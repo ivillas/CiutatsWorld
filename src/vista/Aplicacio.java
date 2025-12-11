@@ -71,7 +71,7 @@ public class Aplicacio {
                     int panelHeight = getHeight();
                     g.drawImage(img, 0, 0, panelWidth, panelHeight, this);
                 } else {
-                    System.out.println("No se pudo cargar la imagen: " + rutaImatge);
+                    System.out.println("No s'ha pogut carregar l'imatge: " + rutaImatge);
                 }
             }
         };
@@ -109,7 +109,12 @@ public class Aplicacio {
 		itemAddCiutat.setMnemonic(KeyEvent.VK_A);
 		itemAddCiutat.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,ActionEvent.ALT_MASK));
 		itemAddCiutat.setActionCommand("addCiutat");
-		itemAddCiutat.addActionListener(null);
+		itemAddCiutat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaAddCiutat().mostrar();							
+				frame.dispose();
+			}
+		});
 		
 		itemEditCiutat = new JMenuItem("Editar Ciutat");
 		itemEditCiutat.setMnemonic(KeyEvent.VK_E);
