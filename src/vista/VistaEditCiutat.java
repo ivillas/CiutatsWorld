@@ -199,7 +199,7 @@ public class VistaEditCiutat {
                     cmbDistricte.addItem(districte); 
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace(); // Mostrar error si hi ha una excepció
+                ex.printStackTrace(); 
             }
         });
 		
@@ -210,8 +210,7 @@ public class VistaEditCiutat {
             	String nomPais = null;
                 if (e.getSource() == tablaCiutats) {
                     int filaSeleccionada = tablaCiutats.getSelectedRow(); 
-                    
-                    if (filaSeleccionada != -1) { 
+                                      if (filaSeleccionada != -1) { 
                         cityActual = ciutats.get(filaSeleccionada);
                         
                         txtId.setText(cityActual.getID()) ; 
