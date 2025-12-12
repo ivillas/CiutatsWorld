@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTextField;
@@ -38,7 +39,8 @@ public class VistaEditCiutat {
 	private JTextField txfCiutat;
 	  private JTable tablaCiutats; 
 	    private DefaultTableModel tableModel; 
-
+	    List<Ciutat> ciutats = new ArrayList<>();
+	    Ciutat cityActual; 
 	
 	/**
 	 * Launch the application.
@@ -207,29 +209,21 @@ public class VistaEditCiutat {
             public void mouseClicked(MouseEvent e) {
             	String nomPais = null;
                 if (e.getSource() == tablaCiutats) {
-                    int filaSeleccionada = tablaCiutats.getSelectedRow(); // Obtener la fila seleccionada
+                    int filaSeleccionada = tablaCiutats.getSelectedRow(); 
                     
                     if (filaSeleccionada != -1) { 
-                        Ciutat cityActual = new Ciutat();
-                        txtId.setText(String.valueOf(tablaCiutats.getValueAt(filaSeleccionada, 0))); 
-                        txtNom.setText((String) tablaCiutats.getValueAt(filaSeleccionada, 1)); 
+                        cityActual = ciutats.get(filaSeleccionada);
                         
-                        String countryCode = (String) tablaCiutats.getValueAt(filaSeleccionada, 2);
-                        try {
-							 nomPais = CiutatDAO.nomPais(countryCode);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-                                           
-                        
+                        txtId.setText(cityActual.getID()) ; 
+                        txtNom.setText(cityActual.getName()); 
+                         try {
+								nomPais = CiutatDAO.nomPais(cityActual.getCountryCode());
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
                         cmbPaisos.setSelectedItem(nomPais); 
-
-                        cityActual.setDistrict((String) tablaCiutats.getValueAt(filaSeleccionada, 3)); // Distrito
-                        cityActual.setPopulation((Integer) tablaCiutats.getValueAt(filaSeleccionada, 4)); // Población
-                        
-                        // Ahora puedes usar cityActual como desees
-                        System.out.println(cityActual);
+                        cmbDistricte.setSelectedItem(cityActual.getDistrict());
+                        txtPoblacio.setText(String.valueOf(cityActual.getPopulation()));
                     }
                 }
             }
@@ -242,8 +236,8 @@ public class VistaEditCiutat {
 				boolean guardarOk =true;
 				String ciutat = txtNom.getText();
 				try {
-					if(CiutatDAO.existeixCiutat(ciutat, code)) {
-						JOptionPane.showMessageDialog(frame,"La ciutat ja existeix en aquest pais");
+					if(CiutatDAO.existeixCiutat(ciutat, code) && ciutat != toString().valueOf(cityActual.getName()) ) {
+						JOptionPane.showMessageDialog(frame,"Ja existeix una ciutat amb aquest nom en aquest pais");
 						txtNom.requestFocus();
 						txtNom.selectAll();
 						guardarOk = false;
@@ -273,7 +267,7 @@ public class VistaEditCiutat {
 				
 			try {
 				if(!CiutatDAO.existeixCiutat(ciutat, code)) {
-				CiutatDAO.addCiutat(ciutat, code,district , poblacio);
+				CiutatDAO.editarCiutat(ciutat, code, district, poblacio);
 				}
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -319,7 +313,7 @@ public class VistaEditCiutat {
     private void mostrarCiutats(String cadena) {
         tableModel.setRowCount(0);
         try {
-            List<Ciutat> ciutats = CiutatDAO.llistarPerNom(cadena);
+            ciutats = CiutatDAO.llistarPerNom(cadena);
             for (Ciutat ciutat : ciutats) {
                 tableModel.addRow(new Object[]{ciutat.getName(), ciutat.getCountryCode()}); 
             }
