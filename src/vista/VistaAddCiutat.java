@@ -158,12 +158,14 @@ public class VistaAddCiutat {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				boolean guardarOk =true;
 				String ciutat = txtNom.getText();
 				try {
 					if(CiutatDAO.existeixCiutat(ciutat, code)) {
 						JOptionPane.showMessageDialog(frame,"La ciutat ja existeix en aquest pais");
 						txtNom.requestFocus();
 						txtNom.selectAll();
+						guardarOk = false;
 					}
 				} catch (HeadlessException e1) {
 					e1.printStackTrace();
@@ -176,12 +178,14 @@ public class VistaAddCiutat {
 					 JOptionPane.showMessageDialog(frame,"La població nomes pot contindre un nombre enter positiu");
 					 txtPoblacio.requestFocus();
 					 txtPoblacio.selectAll();
+					 guardarOk = false;
 				}
 				long poblacio = Long.parseLong(txtPoblacio.getText());
 			if(poblacio < 10000 || poblacio > 5000000000L) {
 				 JOptionPane.showMessageDialog(frame,"La poblacio ha de ser numeric i ha d'estar entre 10.000 i 5.000.000.000 habitans");
 				 txtPoblacio.requestFocus();
 				 txtPoblacio.selectAll();
+				 guardarOk = false;
 			}
 			
 			String district = cmbDistricte.getSelectedItem().toString();
@@ -194,9 +198,10 @@ public class VistaAddCiutat {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			if(guardarOk) {
     		new Aplicacio().mostrar();
     		frame.dispose();
-			
+			}
 			}
 			
 			

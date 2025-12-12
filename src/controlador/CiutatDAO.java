@@ -94,9 +94,7 @@ public class CiutatDAO {
 	    try (PreparedStatement statement = con.prepareStatement(sql);
 	         ResultSet resultSet = statement.executeQuery()) {
 	        
-	        // Mover el cursor al primer resultado
 	        if (resultSet.next()) {
-	            // Obtener el nuevo ID usando el alias 'new_id'
 	            id = resultSet.getString("proximId");
 	        }
 	        
@@ -202,7 +200,7 @@ public class CiutatDAO {
 	public static void addCiutat(String nom, String code, String district, long population) throws SQLException{
 		int populationInt = (int) population;
 	    if (population < Integer.MIN_VALUE || population > Integer.MAX_VALUE) {
-	        throw new IllegalArgumentException("La población exedeis el rang d'un enter.");
+	        throw new IllegalArgumentException("La població exedeis el rang d'un enter.");
 	    }
 		 Connection con = Configuracio.getConnection();
 		    String sql = "INSERT INTO city (name, CountryCode, District, Population) VALUES (?, ?, ?, ?)";
@@ -215,6 +213,30 @@ public class CiutatDAO {
 		        statement.executeUpdate(); 
 		        JOptionPane.showMessageDialog(null, "Ciutat afegida correctament");
 		    }
+	}
+	
+	public static void editarCiutat(String nom, String code, String district, long population) throws SQLException {
+	    int populationInt = (int) population;
+	    if (population < Integer.MIN_VALUE || population > Integer.MAX_VALUE) {
+	        throw new IllegalArgumentException("La población exedeis el rang d'un enter.");
+	    }
+	    
+	    Connection con = Configuracio.getConnection();
+	    String sql = "UPDATE city SET District = ?, Population = ? WHERE name = ? AND CountryCode = ?";
+
+	    try (PreparedStatement statement = con.prepareStatement(sql)) {
+	        statement.setString(1, district);
+	        statement.setInt(2, populationInt);
+	        statement.setString(3, nom);
+	        statement.setString(4, code);
+	        int rowsUpdated = statement.executeUpdate();
+
+	        if (rowsUpdated > 0) {
+	            JOptionPane.showMessageDialog(null, "Ciutat editada correctament");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No s'ha trobat la ciutat per editar");
+	        }
+	    }
 	}
 	
 }

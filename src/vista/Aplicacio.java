@@ -66,7 +66,6 @@ public class Aplicacio {
                 Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource(rutaImatge));
                 
                 if (img != null) {
-                    // Redimensionar la imagen al tamaño del panel
                     int panelWidth = getWidth();
                     int panelHeight = getHeight();
                     g.drawImage(img, 0, 0, panelWidth, panelHeight, this);
