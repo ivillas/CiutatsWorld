@@ -8,7 +8,7 @@ public class Ciutat {
 	//Atributs
 	
 	
-	private int ID;
+	private String ID;
 	private String Name;
 	private String CountryCode;
 	private String District;
@@ -18,10 +18,10 @@ public class Ciutat {
 	//Getters & Setters
 	
 	
-	public int getID() {
+	public String getID() {
 		return ID;
 	}
-	public void setID(int iD) {
+	public void setID(String iD) {
 		ID = iD;
 	}
 	public String getName() {

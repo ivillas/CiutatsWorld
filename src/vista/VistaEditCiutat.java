@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.CiutatDAO;
+import model.Ciutat;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -24,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VistaEditCiutat {
 
@@ -74,9 +77,10 @@ public class VistaEditCiutat {
 		frame.getContentPane().add(lblBuscar);
 		  tableModel = new DefaultTableModel();
 	        tableModel.addColumn("Ciutats trobades"); 
-
+	        tableModel.addColumn("Codi pais");
 	        tablaCiutats = new JTable(tableModel); 
 	        JScrollPane scrollPane = new JScrollPane(tablaCiutats); 
+	      
 	        scrollPane.setBounds(10, 64, 464, 145);
 	        frame.getContentPane().add(scrollPane);
 
@@ -197,6 +201,40 @@ public class VistaEditCiutat {
             }
         });
 		
+        
+        tablaCiutats.addMouseListener(new MouseAdapter()  {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	String nomPais = null;
+                if (e.getSource() == tablaCiutats) {
+                    int filaSeleccionada = tablaCiutats.getSelectedRow(); // Obtener la fila seleccionada
+                    
+                    if (filaSeleccionada != -1) { 
+                        Ciutat cityActual = new Ciutat();
+                        txtId.setText(String.valueOf(tablaCiutats.getValueAt(filaSeleccionada, 0))); 
+                        txtNom.setText((String) tablaCiutats.getValueAt(filaSeleccionada, 1)); 
+                        
+                        String countryCode = (String) tablaCiutats.getValueAt(filaSeleccionada, 2);
+                        try {
+							 nomPais = CiutatDAO.nomPais(countryCode);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                                           
+                        
+                        cmbPaisos.setSelectedItem(nomPais); 
+
+                        cityActual.setDistrict((String) tablaCiutats.getValueAt(filaSeleccionada, 3)); // Distrito
+                        cityActual.setPopulation((Integer) tablaCiutats.getValueAt(filaSeleccionada, 4)); // Población
+                        
+                        // Ahora puedes usar cityActual como desees
+                        System.out.println(cityActual);
+                    }
+                }
+            }
+        });
+        
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
@@ -279,17 +317,18 @@ public class VistaEditCiutat {
      */
     
     private void mostrarCiutats(String cadena) {
-    	 tableModel.setRowCount(0);
+        tableModel.setRowCount(0);
         try {
-            List<String> ciutats = CiutatDAO.llistarPerNom(cadena);
-            for (String ciutat : ciutats) {
-                tableModel.addRow(new Object[]{ciutat}); 
+            List<Ciutat> ciutats = CiutatDAO.llistarPerNom(cadena);
+            for (Ciutat ciutat : ciutats) {
+                tableModel.addRow(new Object[]{ciutat.getName(), ciutat.getCountryCode()}); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(frame, "Error al cargar las ciudades.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 	
     /**
      * Mostre la finestra.

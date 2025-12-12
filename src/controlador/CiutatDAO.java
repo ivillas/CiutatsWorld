@@ -61,17 +61,23 @@ public class CiutatDAO {
 
 	
 
-	public static List<String> llistarPerNom (String cadena) throws SQLException{
+	public static List<Ciutat> llistarPerNom(String cadena) throws SQLException {
 	    Connection con = Configuracio.getConnection();
 	    cadena = "'%" + cadena + "%'";
-	    String sql = "SELECT name FROM city WHERE name LIKE" + cadena;
-	    List<String> ciutats = new ArrayList<>();
+	    String sql = "SELECT ID, Name, CountryCode, District, Population FROM city WHERE Name LIKE " + cadena;
+	    List<Ciutat> ciutats = new ArrayList<>();
 
 	    try (PreparedStatement statement = con.prepareStatement(sql);
 	         ResultSet resultSet = statement.executeQuery()) {
 
 	        while (resultSet.next()) {
-	            ciutats.add(resultSet.getString("name"));
+	            Ciutat ciutat = new Ciutat();
+	            ciutat.setID(resultSet.getString("ID"));
+	            ciutat.setName(resultSet.getString("Name"));
+	            ciutat.setCountryCode(resultSet.getString("CountryCode"));
+	            ciutat.setDistrict(resultSet.getString("District"));
+	            ciutat.setPopulation(resultSet.getInt("Population"));
+	            ciutats.add(ciutat);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); 
@@ -83,6 +89,7 @@ public class CiutatDAO {
 
 	    return ciutats;
 	}
+
 	
 	
 	
@@ -237,6 +244,22 @@ public class CiutatDAO {
 	            JOptionPane.showMessageDialog(null, "No s'ha trobat la ciutat per editar");
 	        }
 	    }
+	}
+	
+	public static String nomPais(String code) throws SQLException{
+		String nom = null;
+		Connection con = Configuracio.getConnection();
+		code = "'" + code + "'";
+				String sql = "SELECT Name FROM Country WHERE code = " + code;
+		 try (PreparedStatement statement = con.prepareStatement(sql);
+		ResultSet resulset = statement.executeQuery()) {
+			 if (resulset.next()) {
+				 nom = resulset.getString("name");
+			 }
+		}
+		
+		
+		return nom;
 	}
 	
 }
