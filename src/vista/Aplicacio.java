@@ -119,7 +119,12 @@ public class Aplicacio {
 		itemEditCiutat.setMnemonic(KeyEvent.VK_E);
 		itemEditCiutat.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,ActionEvent.ALT_MASK));
 		itemEditCiutat.setActionCommand("editarCiutat");
-		itemEditCiutat.addActionListener(null);
+		itemEditCiutat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaEditCiutat().mostrar();							
+				frame.dispose();
+			}
+		});
 		
 		itemSortir = new JMenuItem("Sortir");
 		itemSortir.setMnemonic(KeyEvent.VK_S);

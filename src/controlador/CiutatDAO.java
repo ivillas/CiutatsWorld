@@ -262,4 +262,20 @@ public class CiutatDAO {
 		return nom;
 	}
 	
+	public static boolean eliminarCiutat(String id) throws SQLException{
+		boolean eliminat = false;
+		 int filesAfectades = 0;
+		Connection con = Configuracio.getConnection();
+		String sql = " DELETE FROM city WHERE ID = "+ id ;
+		 try (PreparedStatement statement = con.prepareStatement(sql)){
+			 filesAfectades = statement.executeUpdate(); 
+			 
+		 }
+
+		 if(filesAfectades >= 1) eliminat=true;
+		return eliminat;
+
+				
+	}
+	
 }

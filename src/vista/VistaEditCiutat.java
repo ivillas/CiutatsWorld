@@ -235,7 +235,7 @@ public class VistaEditCiutat {
 				boolean guardarOk =true;
 				String ciutat = txtNom.getText();
 				try {
-					if(CiutatDAO.existeixCiutat(ciutat, code) && ciutat != toString().valueOf(cityActual.getName()) ) {
+					if(CiutatDAO.existeixCiutat(ciutat, code) && !ciutat.equals(cityActual.getName())) {
 						JOptionPane.showMessageDialog(frame,"Ja existeix una ciutat amb aquest nom en aquest pais");
 						txtNom.requestFocus();
 						txtNom.selectAll();
@@ -265,14 +265,22 @@ public class VistaEditCiutat {
 			String district = cmbDistricte.getSelectedItem().toString();
 				
 			try {
-				if(!CiutatDAO.existeixCiutat(ciutat, code)) {
+		
 				CiutatDAO.editarCiutat(ciutat, code, district, poblacio);
-				}
+				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			if(guardarOk) {
+				try {
+					
+					CiutatDAO.editarCiutat(ciutat, code, district, poblacio);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
     		new Aplicacio().mostrar();
     		frame.dispose();
 			}
@@ -301,6 +309,28 @@ public class VistaEditCiutat {
 		frame.getContentPane().add(btnCancelar);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String id = cityActual.getID();
+				int opcio = JOptionPane.showConfirmDialog(null,"¿Está segur que voils eliminar la ciutat?","Aceptar",JOptionPane.OK_CANCEL_OPTION);
+
+
+			        if (opcio == JOptionPane.OK_OPTION) {
+						try {
+							
+							if(CiutatDAO.eliminarCiutat(id)) {
+								JOptionPane.showMessageDialog(null,"La ciutat s'ha eliminat");
+							} else JOptionPane.showMessageDialog(null,"La ciutat no s'ha pogut elimina");
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+			        } else if (opcio == JOptionPane.CANCEL_OPTION) {
+			        	JOptionPane.showMessageDialog(null,"Opcio cancelada la ciutat no s'eliminara");
+			        } else {
+			        }
+			    }
+
+		});
 		btnEliminar.setBounds(108, 427, 89, 23);
 		frame.getContentPane().add(btnEliminar);
 	}
