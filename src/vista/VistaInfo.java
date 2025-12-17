@@ -55,12 +55,12 @@ public class VistaInfo {
 		JLabel lblContextInfo = new JLabel("<html>Aplicació per poder llistar, crear, editar o <br> eliminar  ciutats de la base de dades World<html>");
 		lblContextInfo.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblContextInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblContextInfo.setBounds(73, 91, 304, 79);
+		lblContextInfo.setBounds(73, 91, 304, 69);
 		frame.getContentPane().add(lblContextInfo);
 		
-		JLabel lblVersionInfo = new JLabel("Versió: 1.1");
+		JLabel lblVersionInfo = new JLabel("Versió: 1.2");
 		lblVersionInfo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblVersionInfo.setBounds(186, 193, 75, 14);
+		lblVersionInfo.setBounds(186, 171, 75, 14);
 		frame.getContentPane().add(lblVersionInfo);
 		
 		JButton btnTornar = new JButton("Tornar");
@@ -72,6 +72,11 @@ public class VistaInfo {
         });
 		btnTornar.setBounds(172, 227, 89, 23);
 		frame.getContentPane().add(btnTornar);
+		
+		JLabel lblAutor = new JLabel("Autor: @ivilla");
+		lblAutor.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAutor.setBounds(172, 196, 89, 14);
+		frame.getContentPane().add(lblAutor);
 	}
 	
     /**
