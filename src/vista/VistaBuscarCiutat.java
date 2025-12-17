@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 
 import controlador.CiutatDAO;
+import model.Ciutat;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -50,8 +52,10 @@ public class VistaBuscarCiutat {
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Ciutats trobades"); 
+        tableModel.addColumn("Codi pais");
 
-        tablaCiutats = new JTable(tableModel); 
+        
+        tablaCiutats = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(tablaCiutats); 
         scrollPane.setBounds(10, 48, 464, 368);
         frame.getContentPane().add(scrollPane);
@@ -88,11 +92,11 @@ public class VistaBuscarCiutat {
      */
     
     private void mostrarCiutats(String cadena) {
-    	 tableModel.setRowCount(0);
+        tableModel.setRowCount(0);
         try {
-            List<String> ciutats = CiutatDAO.llistarPerNom(cadena);
-            for (String ciutat : ciutats) {
-                tableModel.addRow(new Object[]{ciutat}); 
+            List<Ciutat> ciutats = CiutatDAO.llistarPerNom(cadena);
+            for (Ciutat ciutat : ciutats) {
+                tableModel.addRow(new Object[]{ciutat.getName(), ciutat.getCountryCode()}); 
             }
         } catch (SQLException e) {
             e.printStackTrace();

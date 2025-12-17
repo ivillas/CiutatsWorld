@@ -1,12 +1,16 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -66,12 +70,11 @@ public class Aplicacio {
                 Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource(rutaImatge));
                 
                 if (img != null) {
-                    // Redimensionar la imagen al tamaño del panel
                     int panelWidth = getWidth();
                     int panelHeight = getHeight();
                     g.drawImage(img, 0, 0, panelWidth, panelHeight, this);
                 } else {
-                    System.out.println("No se pudo cargar la imagen: " + rutaImatge);
+                    System.out.println("No s'ha pogut carregar l'imatge: " + rutaImatge);
                 }
             }
         };
@@ -109,13 +112,23 @@ public class Aplicacio {
 		itemAddCiutat.setMnemonic(KeyEvent.VK_A);
 		itemAddCiutat.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,ActionEvent.ALT_MASK));
 		itemAddCiutat.setActionCommand("addCiutat");
-		itemAddCiutat.addActionListener(null);
+		itemAddCiutat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaAddCiutat().mostrar();							
+				frame.dispose();
+			}
+		});
 		
 		itemEditCiutat = new JMenuItem("Editar Ciutat");
 		itemEditCiutat.setMnemonic(KeyEvent.VK_E);
 		itemEditCiutat.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,ActionEvent.ALT_MASK));
 		itemEditCiutat.setActionCommand("editarCiutat");
-		itemEditCiutat.addActionListener(null);
+		itemEditCiutat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaEditCiutat().mostrar();							
+				frame.dispose();
+			}
+		});
 		
 		itemSortir = new JMenuItem("Sortir");
 		itemSortir.setMnemonic(KeyEvent.VK_S);
@@ -133,17 +146,31 @@ public class Aplicacio {
 		menuAjuda = new JMenu("Ajuda");
 		
 		
-		itemAjuda = new JMenuItem("Ajuda");
+		itemAjuda = new JMenuItem("Javadoc");
 		itemAjuda.setMnemonic(KeyEvent.VK_J);
 		itemAjuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J,ActionEvent.ALT_MASK));
-		itemAjuda.setActionCommand("ajuda");
-		itemAjuda.addActionListener(null);
+		itemAjuda.setActionCommand("javadoc");
+		itemAjuda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 File htmlFile = new File("doc/index.html");
+				 try {
+					Desktop.getDesktop().browse(htmlFile.toURI());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		itemInfo = new JMenuItem("Informacio");
 		itemInfo.setMnemonic(KeyEvent.VK_F);
 		itemInfo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,ActionEvent.ALT_MASK));
 		itemInfo.setActionCommand("info");
-		itemInfo.addActionListener(null);
+		itemInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VistaInfo().mostrar();							
+				frame.dispose();
+			}
+		});
 		
 		menuAjuda.add(itemAjuda);
 		menuAjuda.add(itemInfo);
